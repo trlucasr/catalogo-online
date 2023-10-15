@@ -37,10 +37,9 @@
           <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Pesquisar..." aria-label="Search">
         </form> -->
 
-        <!-- <div class="text-end">
-          <a href=""><button type="button" class="btn btn-outline-light me-2">Localizar</button></a>
+        <div class="text-end">
           <a href="login.html"><button type="button" class="btn btn-warning">Logout</button></a>
-        </div> -->
+        </div>
       </div>
     </div>
   </header>
@@ -73,21 +72,6 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>              
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>              
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-            </tr>
           </tbody>
         </table>
 
@@ -102,21 +86,24 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form>
+            <form id="categoria-form" method="POST">
               <div class="mb-3">
-                <label for="recipient-name" class="col-form-label">Descrição:</label>
-                <input type="text" class="form-control" id="recipient-name">
+                <label for="descricao" class="col-form-label">Descrição:</label>
+                <input type="text" class="form-control" id="descricao" name="descricao">
               </div>
               <div class="mb-3">
-                <label for="recipient-name" class="col-form-label">Ativo:</label>
-                <input type="text" class="form-control" id="recipient-name">
-              </div>                        
+                <label for="status" class="col-form-label">Ativo:</label>
+                <select class="form-select" id="status" name="status">
+                  <option value="A">Sim</option>
+                  <option value="I">Não</option>
+                </select>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Cadastrar</button>
+              </div>
             </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            <button type="button" class="btn btn-primary">Cadastrar</button>
-          </div>
+          </div>          
         </div>
       </div>
     </div>
@@ -131,8 +118,9 @@
       <p class="mb-1">Projeto desenvolvido para Software Product: Analysis, Specification, Project</p>      
     </div>
   </footer>
-
+  
   <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/categorias.js"></script>
 
 </body>
 

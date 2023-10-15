@@ -1,24 +1,21 @@
 const express = require('express');
 const app = express();
-const morgan = require('morgan');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 
-require('./database');
-
-// Middlewares
-app.use(morgan('dev'));
-app.use(express.json());
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.json());
 
-// Variaveis
-app.set('port', 8000);
+const hostname = 'localhost'; // Defina o hostname para localhost
+const port = 8000; // Defina a porta para 8000
 
-// Rotas
-// app.use('/servico', require('./src/routes/servico.routes'));
-// app.use('/agendamento', require('./src/routes/agendamento.routes'));
-app.use('/auth', require('./routes/auth.routes'));
 app.use('/login', require('./routes/auth.routes'));
+app.use('/produtos', require('./routes/produto.routes'));
+app.use('/categorias', require('./routes/categoria.routes'));
 
-app.listen(app.get('port'), () => {
-    console.log(`Ws escutando na Porta ${app.get('port')}`);
+app.listen(port, hostname, () => {
+  console.log(`Servidor está rodando em http://${hostname}:${port}`);
 });

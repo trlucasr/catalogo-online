@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const Auth = sequelize.define('Auth', {
   nome: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   email: {
     type: DataTypes.STRING, 
