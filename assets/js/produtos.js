@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const productCardsContainer = document.getElementById('product-cards');
+  const isIndexPage = window.location.href.includes('index.html');
 
   // Função para criar um card de produto
   const createProductCard = (produto) => {
@@ -71,14 +72,20 @@ document.addEventListener('DOMContentLoaded', () => {
     card.className = 'col';
     card.innerHTML = `
       <div class="card shadow-sm">
-        <img src="${produto.imagem}" class="bd-placeholder-img card-img-top" width="100%" height="225" alt="${produto.nome}">
+        <img src="${produto.imagem}" class="bd-placeholder-img card-img-top" width="70%" height="300" alt="${produto.nome}">
         <div class="card-body">
           <h5 class="card-title">${produto.nome}</h5>
-          <p class="card-text">${produto.descricao}</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-primary">Editar</button>
-            </div>
+          <p class="card-text">${produto.descricao}</p>          
+          <div class="d-flex justify-content-between align-items-center">          
+          ${
+            isIndexPage
+              ? `<div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-primary">Eu quero!</button>
+                </div>`
+              : `<div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-primary">Editar</button>
+                </div>`
+          }
             <small class="text-body-secondary">R$ ${valorFormatado}</small>
           </div>
         </div>
@@ -111,4 +118,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // Chame a função para buscar produtos e renderizar os cards
   fetchProductsAndRenderCards();
   console.log('Depois de buscar produtos...');
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const selectCategoria = document.getElementById('categoria');
+
+  // Faça uma solicitação para obter a lista de categorias
+  fetch('http://localhost:8000/categorias/read') // Substitua 'sua_rota' pela URL correta da rota de leitura de categorias
+    .then((response) => response.json())
+    .then((categorias) => {
+      // Preencha o select com as categorias
+      categorias.forEach((categoria) => {
+        const option = document.createElement('option');
+        option.value = categoria.id; // Use a propriedade apropriada para o valor da categoria
+        option.text = categoria.descricao; // Use a propriedade apropriada para o nome da categoria
+        selectCategoria.appendChild(option);
+      });
+    })
+    .catch((error) => {
+      console.error('Erro ao obter categorias:', error);
+    });
 });

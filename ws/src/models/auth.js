@@ -13,11 +13,12 @@ const Auth = sequelize.define('Auth', {
   },
   senha: {
     type: DataTypes.STRING, 
-    allowNull: false,
-    set(value) {      
-      const hashedPassword = bcrypt.hashSync(value, 10);
-      this.setDataValue('senha', hashedPassword);
-    },
+    allowNull: false
+    // allowNull: false,
+    // set(value) {      
+    //   const hashedPassword = bcrypt.hashSync(value, 10);
+    //   this.setDataValue('senha', hashedPassword);
+    // },
   },
   status: {
     type: DataTypes.ENUM('A', 'I', 'E'),

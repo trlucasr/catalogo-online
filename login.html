@@ -17,14 +17,23 @@
   <link href="assets/dist/css/main.css" rel="stylesheet">
   <link href="assets/dist/css/login.css" rel="stylesheet">
 
+  <style>
+  
+  .centered-image {
+    display: block; /* Certifica-se de que a imagem seja exibida como um bloco */
+    margin: 0 auto; /* Define margens automáticas para centralização horizontal */
+  }
+
+  </style>
+
 </head>
 
 <body class="d-flex align-items-center py-4 bg-body-tertiary">
 
   <main class="form-signin w-100 m-auto">
     <form id="login-form" method="POST">
-      <img class="mb-4" src="assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-      <h1 class="h4 mb-4 fw-normal">Acessar Catálogo Online:</h1>
+      <img class="mb-4 centered-image" src="assets/brand/logo.png" alt="" width="102" height="97">
+      <h1 class="h4 mb-4 text-center">Acessar Catálogo Online:</h1>
 
       <div class="form-floating">
         <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
@@ -35,7 +44,8 @@
         <label for="senha">Senha</label>
       </div>
       <br>
-      <button class="btn btn-primary w-100 py-2" type="submit">Entrar</button>
+      <button class="btn btn-primary w-100 py-2" type="submit">Entrar</button><br><br>
+      <button class="btn btn-secondary w-100 py-2" type="button" onclick="window.location.href = 'index.html';">Voltar ao Catálogo</button>
       <p class="mt-5 mb-3 text-body-secondary" id="error-message"></p>
     </form>
   </main>
