@@ -1,13 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Selecione o formulário pelo ID
   const produtoForm = document.getElementById('produto-form');
-
-  // Selecione o botão "Cadastrar" na página
   const cadastrarButton = document.querySelector('button[type="submit"]');
 
-  // Adicione um evento de clique ao botão "Cadastrar"
   cadastrarButton.addEventListener('click', async (e) => {
-    e.preventDefault(); // Impedir o envio padrão do formulário
+    e.preventDefault();
 
     // Obtenha os dados do formulário
     const nome = document.getElementById('nome').value;
@@ -16,44 +12,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoria = document.getElementById('categoria').value;
     const status = "A";
     
-    // Obtenha o campo de imagem
     const imagemInput = document.getElementById('imagem');
-    // O campo de imagem é do tipo "file", portanto, você precisa usar "imagemInput.files[0]" para obter o arquivo selecionado.
     const imagem = imagemInput.files[0];
 
-    // Crie um objeto FormData para enviar os dados, incluindo a imagem
     const formData = new FormData();
     formData.append('nome', nome);
     formData.append('descricao', descricao);
     formData.append('valor', valor);
     formData.append('categoria', categoria);
     formData.append('status', status);
-    formData.append('imagem', imagem); // Adicione a imagem ao FormData
+    formData.append('imagem', imagem);
 
-    // Envie os dados para o servidor usando uma requisição POST
+    // Envia os dados para o servidor POST
     try {
       const response = await fetch('http://localhost:8000/produtos/create', {
         method: 'POST',
-        body: formData, // Use o FormData para enviar os dados, incluindo a imagem
+        body: formData,
       });
 
       if (response.ok) {
         const responseData = await response.json();
-        // Faça algo com a resposta do servidor, se necessário
         alert(responseData.mensagem);
-
-        // Feche o modal
         const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
         modal.hide();
 
         location.reload();
 
-      } else {
-        // Lida com erros de resposta do servidor
+      } else {        
         console.error('Erro no servidor:', response.status, response.statusText);
       }
-    } catch (error) {
-      // Lida com erros de rede ou outros erros
+    } catch (error) {      
       console.error('Erro de rede:', error);
     }
   });
@@ -76,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="card-body">
           <h5 class="card-title">${produto.nome}</h5>
           <p class="card-text">${produto.descricao}</p>          
+          <p class="card-text">${produto.categoria}</p>     
           <div class="d-flex justify-content-between align-items-center">          
           ${
             isIndexPage
@@ -113,26 +102,24 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Erro de rede:', error);
     }
   };
-
-  console.log('Antes de buscar produtos...');
-  // Chame a função para buscar produtos e renderizar os cards
+  
   fetchProductsAndRenderCards();
-  console.log('Depois de buscar produtos...');
+
 });
 
 
 document.addEventListener('DOMContentLoaded', () => {
   const selectCategoria = document.getElementById('categoria');
 
-  // Faça uma solicitação para obter a lista de categorias
-  fetch('http://localhost:8000/categorias/read') // Substitua 'sua_rota' pela URL correta da rota de leitura de categorias
+  // Obter a lista de categorias
+  fetch('http://localhost:8000/categorias/read') 
     .then((response) => response.json())
     .then((categorias) => {
       // Preencha o select com as categorias
       categorias.forEach((categoria) => {
         const option = document.createElement('option');
-        option.value = categoria.id; // Use a propriedade apropriada para o valor da categoria
-        option.text = categoria.descricao; // Use a propriedade apropriada para o nome da categoria
+        option.value = categoria.descricao; 
+        option.text = categoria.descricao; 
         selectCategoria.appendChild(option);
       });
     })
