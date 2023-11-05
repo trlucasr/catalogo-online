@@ -4,8 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   cadastrarButton.addEventListener('click', async (e) => {
     e.preventDefault();
-
-    // Obtenha os dados do formulário
+    
     const nome = document.getElementById('nome').value;
     const descricao = document.getElementById('descricao').value;
     const valor = document.getElementById('valor').value;
@@ -22,8 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     formData.append('categoria', categoria);
     formData.append('status', status);
     formData.append('imagem', imagem);
-
-    // Envia os dados para o servidor POST
+    
     try {
       const response = await fetch('http://localhost:8000/produtos/create', {
         method: 'POST',
@@ -51,8 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const productCardsContainer = document.getElementById('product-cards');
   const isIndexPage = window.location.href.includes('index.html');
-
-  // Função para criar um card de produto
+  
   const createProductCard = (produto) => {
     const valorFormatado = parseFloat(produto.valor).toFixed(2).replace('.', ',');
 
@@ -73,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>`
               : `<div class="btn-group">
                   <button type="button" class="btn btn-sm btn-outline-primary">Editar</button>
+                  <button type="button" class="btn btn-sm btn-danger" onclick="deleteProduct(${produto.id})">Excluir</button>
                 </div>`
           }
             <small class="text-body-secondary">R$ ${valorFormatado}</small>
@@ -83,8 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return card;
   };
-
-  // Função para buscar os produtos na API e criar os cards
+  
   const fetchProductsAndRenderCards = async () => {
     try {
       const response = await fetch('http://localhost:8000/produtos/read');
@@ -110,12 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const selectCategoria = document.getElementById('categoria');
-
-  // Obter a lista de categorias
+  
   fetch('http://localhost:8000/categorias/read') 
     .then((response) => response.json())
-    .then((categorias) => {
-      // Preencha o select com as categorias
+    .then((categorias) => {      
       categorias.forEach((categoria) => {
         const option = document.createElement('option');
         option.value = categoria.descricao; 
@@ -127,3 +122,23 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Erro ao obter categorias:', error);
     });
 });
+
+
+function deleteProduct(productId) {
+  if (confirm("Tem certeza de que deseja excluir este produto?")) {
+    fetch(`http://localhost:8000/produtos/delete/${productId}`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert('Produto excluído com sucesso');
+          location.reload();
+        } else {
+          console.error('Erro ao excluir o produto:', response.status, response.statusText);
+        }
+      })
+      .catch((error) => {
+        console.error('Erro de rede:', error);
+      });
+  }
+}

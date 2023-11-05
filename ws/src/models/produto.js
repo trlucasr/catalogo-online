@@ -11,7 +11,7 @@ const Produto = sequelize.define('Produto', {
     allowNull: false,
   },
   valor: {
-    type: DataTypes.DECIMAL(10, 2), // Assume um valor decimal com 10 dígitos no total e 2 casas decimais
+    type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },
   categoria: {
@@ -23,7 +23,7 @@ const Produto = sequelize.define('Produto', {
     defaultValue: 'A',
   },
   imagem: {
-    type: DataTypes.STRING, // Armazene o caminho relativo da imagem
+    type: DataTypes.STRING,
     allowNull: true,
   },
 });

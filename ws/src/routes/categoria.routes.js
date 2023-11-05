@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Categoria = require('../models/categoria');
+const Produto = require('../models/produto');
 
 // Rota para criar uma nova categoria
 router.post('/create', async (req, res) => {
@@ -27,5 +28,34 @@ router.get('/read', async (req, res) => {
       res.status(500).json({ error: true, message: error.message });
     }
   });
+
+// Rota para excluir uma Categoria
+router.delete('/delete/:id', async (req, res) => {
+  const categoriaId = req.params.id;
+
+  try {
+    const categoria = await Categoria.findByPk(categoriaId);
+
+    if (!categoria) {
+      return res.status(404).json({ error: true, message: 'Categoria não encontrada' });
+    }
+
+    console.log(categoria.descricao);
+
+    const produtosVinculados = await Produto.findAll({
+      where: { categoria: categoria.descricao },
+    });
+
+    if (produtosVinculados.length > 0) {
+      return res.status(400).json({ error: true, mensagem: 'Não é possível excluir a categoria, pois existem produtos vinculados a ela.' });
+    }
+   
+    await categoria.destroy();
+
+    res.status(200).json({ mensagem: 'Categoria excluída com sucesso' });
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
 
 module.exports = router;

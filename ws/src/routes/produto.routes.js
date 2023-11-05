@@ -4,33 +4,30 @@ const Produto = require('../models/produto');
 const multer = require('multer');
 const path = require('path');
 
-// Configurar o armazenamento para os uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '../assets/brand/produtos'); // Especifique o caminho da pasta onde as imagens serão armazenadas
+    cb(null, '../assets/brand/produtos'); 
   },
   filename: (req, file, cb) => {
     const extname = path.extname(file.originalname);
-    cb(null, Date.now() + extname); // Nomeie o arquivo com um timestamp para evitar conflitos
+    cb(null, Date.now() + extname); 
   },
 });
 
 const upload = multer({ storage });
 
-// Rota para criar um novo produto com upload de imagem
 router.post('/create', upload.single('imagem'), async (req, res) => {
   try {
     const { nome, descricao, valor, categoria, status } = req.body;
-    const imagem = req.file ? req.file.path : null; // Obtenha o caminho da imagem
+    const imagem = req.file ? req.file.path : null; 
 
-    // Crie um novo produto no banco de dados
     const produto = await Produto.create({
       nome,
       descricao,
       valor,
       categoria,
       status,
-      imagem, // Armazene o caminho da imagem no banco de dados
+      imagem, 
     });
 
     res.status(201).json({ mensagem: 'Inclusão realizada com sucesso' });
@@ -39,13 +36,11 @@ router.post('/create', upload.single('imagem'), async (req, res) => {
   }
 });
 
-// Rota para listar todos os produtos
 router.get('/read', async (req, res) => {
   try {
-    // Consulte o banco de dados para obter todos os produtos
+    
     const produtos = await Produto.findAll();
-
-    // Mapeie os produtos para incluir informações de imagem
+ 
     const produtosComImagens = produtos.map((produto) => {
       return {
         id: produto.id,
@@ -53,13 +48,32 @@ router.get('/read', async (req, res) => {
         descricao: produto.descricao,
         valor: produto.valor,
         categoria: produto.categoria,
-        status: produto.status,
-        // Adicione o caminho da imagem (ou identificador) aqui
+        status: produto.status, 
         imagem: produto.imagem,
       };
     });
 
     res.status(200).json(produtosComImagens);
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
+
+
+router.delete('/delete/:id', async (req, res) => {
+  const productId = req.params.id;
+
+  try {
+    const produto = await Produto.findByPk(productId);
+
+    if (!produto) {
+      return res.status(404).json({ error: true, message: 'Produto não encontrado' });
+    }
+
+    
+    await produto.destroy();
+
+    res.status(200).json({ mensagem: 'Produto excluído com sucesso' });
   } catch (error) {
     res.status(500).json({ error: true, message: error.message });
   }
