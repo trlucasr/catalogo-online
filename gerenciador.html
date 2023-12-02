@@ -106,7 +106,48 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>  
+
+    <div class="modal fade" id="modalEdicao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Produto</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="produto-form" method="POST" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="nome" class="col-form-label">Nome:</label>
+                <input type="text" class="form-control" id="nomeEdicao" name="Edicaonome">
+              </div>
+              <div class="mb-3">
+                <label for="descricao" class="col-form-label">Descrição:</label>
+                <input type="text" class="form-control" id="descricaoEdicao" name="descricaoEdicao">
+              </div>
+              <div class="mb-3">
+                <label for="valor" class="col-form-label">Valor (R$):</label>
+                <input type="number" class="form-control" id="valorEdicao" name="valorEdicao" step="0.01" placeholder="0,00">
+              </div>
+              <div class="mb-3">
+                <label for="categoria" class="col-form-label">Categoria:</label>
+                <select class="form-select" id="categoriaEdicao" name="categoriaEdicao">
+                  <option value="">Selecione uma categoria</option>
+                </select>
+              </div>  
+              <div class="mb-3">
+                <label for="imagem" class="col-form-label">Imagem:</label>
+                <input type="file" class="form-control" id="imagemEdicao" name="imagemEdicao">
+              </div>           
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" id="botaoAtualizar" class="btn btn-primary" data-bs-dismiss="modal">Alterar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>  
 
   </main>
 

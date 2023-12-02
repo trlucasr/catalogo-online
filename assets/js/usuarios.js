@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cellAcoes.innerHTML = `
         <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-outline-primary">Editar</button>
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="editarUsuario(${usuario.id})">Editar</button>
           <button type="button" class="btn btn-sm btn-danger" onclick="deleteUser(${usuario.id})">Excluir</button>
         </div>
       `;
@@ -117,4 +117,85 @@ function deleteUser(UserId) {
         console.error('Erro de rede:', error);
       });
   }
+}
+
+function editarUsuario(usuarioId) {
+  // Abra o modal de edição
+  const modalEdicao = new bootstrap.Modal(document.getElementById('modalEdicao'));
+
+  async function obterDetalhesUsuario(usuarioId) {
+    try {
+      const response = await fetch(`http://localhost:8000/login/read/${usuarioId}`);
+      if (response.ok) {
+        const usuario = await response.json();
+        return usuario;
+      } else {
+        console.error('Erro ao obter detalhes da usuario:', response.status, response.statusText);
+        throw new Error('Erro ao obter detalhes da usuario');
+      }
+    } catch (error) {
+      console.error('Erro de rede:', error);
+      throw new Error('Erro de rede ao obter detalhes da usuario');
+    }
+  }
+
+  // Preencha os campos do modal com os detalhes da usuario
+  obterDetalhesUsuario(usuarioId)
+    .then((usuario) => {
+      document.getElementById('nomeEdicao').value = usuario.nome;
+      document.getElementById('emailEdicao').value = usuario.email;
+      document.getElementById('senhaEdicao').value = usuario.senha;
+      document.getElementById('statusEdicao').value = usuario.status;
+    })
+    .catch((error) => {
+      console.error('Erro ao obter detalhes da usuario:', error);
+    });
+
+    modalEdicao.show();
+
+  // Adicione um evento ao botão de atualização no modal de edição
+  const botaoAtualizar = document.getElementById('botaoAtualizar');
+  botaoAtualizar.addEventListener('click', async () => {
+    // Obtenha os dados atualizados do formulário do modal
+    const nomeAtualizada = document.getElementById('nomeEdicao').value;
+    const emailAtualizada = document.getElementById('emailEdicao').value;
+    const senhaAtualizada = document.getElementById('senhaEdicao').value;
+    const statusAtualizada = document.getElementById('statusEdicao').value;
+    
+    const dataAtualizada = {
+      nome: nomeAtualizada,
+      email: emailAtualizada,
+      senha: senhaAtualizada,
+      status: statusAtualizada,
+    };
+
+    const jsonDataAtualizado = JSON.stringify(dataAtualizada);
+
+    try {
+      const response = await fetch(`http://localhost:8000/login/update/${usuarioId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: jsonDataAtualizado
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        alert(responseData.mensagem);
+
+        // Feche o modal de edição
+        modalEdicao.hide();
+
+        location.reload();
+
+        // Recarregue os dados da tabela
+        obterDadosDaAPI();
+      } else {
+        console.error('Erro no servidor:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Erro de rede:', error);
+    }
+  });
 }

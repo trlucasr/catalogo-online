@@ -29,6 +29,22 @@ router.get('/read', async (req, res) => {
     }
   });
 
+// Rota para obter detalhes de uma categoria por ID
+router.get('/read/:id', async (req, res) => {
+  const categoriaId = req.params.id;
+
+  try {
+    const categoria = await Categoria.findByPk(categoriaId);
+    if (categoria) {
+      res.json(categoria);
+    } else {
+      res.status(404).json({ error: true, message: 'Categoria não encontrada' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
+
 // Rota para excluir uma Categoria
 router.delete('/delete/:id', async (req, res) => {
   const categoriaId = req.params.id;
@@ -57,5 +73,28 @@ router.delete('/delete/:id', async (req, res) => {
     res.status(500).json({ error: true, message: error.message });
   }
 });
+
+// Rota para atualizar uma categoria
+router.put('/update/:id', async (req, res) => {
+  const categoriaId = req.params.id;
+  const { descricao, status } = req.body;
+
+  try {
+    const categoria = await Categoria.findByPk(categoriaId);
+
+    if (!categoria) {
+      return res.status(404).json({ error: true, message: 'Categoria não encontrada' });
+    }
+
+    categoria.descricao = descricao;
+    categoria.status = status;
+    await categoria.save();
+
+    res.status(200).json({ mensagem: 'Atualização realizada com sucesso' });
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
+
 
 module.exports = router;

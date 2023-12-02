@@ -59,6 +59,21 @@ router.get('/read', async (req, res) => {
   }
 });
 
+router.get('/read/:id', async (req, res) => {
+  const produtoId = req.params.id;
+
+  try {
+    const produto = await Produto.findByPk(produtoId);
+    if (produto) {
+      res.json(produto);
+    } else {
+      res.status(404).json({ error: true, message: 'Produto não encontrado' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
+
 
 router.delete('/delete/:id', async (req, res) => {
   const productId = req.params.id;
@@ -74,6 +89,38 @@ router.delete('/delete/:id', async (req, res) => {
     await produto.destroy();
 
     res.status(200).json({ mensagem: 'Produto excluído com sucesso' });
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
+
+
+// Rota para atualizar uma Produto
+router.put('/update/:id', upload.single('imagem'), async (req, res) => {
+  const produtoId = req.params.id;
+  const { nome, descricao, valor, categoria } = req.body;
+  const imagem = req.file ? req.file.path : null; 
+
+  try {
+    const produto = await Produto.findByPk(produtoId);
+
+    if (!produto) {
+      return res.status(404).json({ error: true, message: 'Produto não encontrado' });
+    }
+
+    produto.nome = nome;
+    produto.descricao = descricao;
+    produto.valor = valor;
+    produto.categoria = categoria;    
+    //produto.imagem = imagem;    
+
+    if (imagem) {
+      produto.imagem = imagem;
+    }
+
+    await produto.save();
+
+    res.status(200).json({ mensagem: 'Atualização realizada com sucesso' });
   } catch (error) {
     res.status(500).json({ error: true, message: error.message });
   }

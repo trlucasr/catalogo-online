@@ -49,6 +49,22 @@ router.get('/read', async (req, res) => {
   }
 });
 
+// Rota para obter detalhes de uma Usuario por ID
+router.get('/read/:id', async (req, res) => {
+  const usuarioId = req.params.id;
+
+  try {
+    const usuario = await Auth.findByPk(usuarioId);
+    if (usuario) {
+      res.json(usuario);
+    } else {
+      res.status(404).json({ error: true, message: 'Usuario não encontrada' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
+
 // Rota para excluir um User
 router.delete('/delete/:id', async (req, res) => {
   const userId = req.params.id;
@@ -67,5 +83,31 @@ router.delete('/delete/:id', async (req, res) => {
     res.status(500).json({ error: true, message: error.message });
   }
 });
+
+
+// Rota para atualizar uma Usuario
+router.put('/update/:id', async (req, res) => {
+  const usuarioId = req.params.id;
+  const { nome, email, senha, status } = req.body;
+
+  try {
+    const usuario = await Auth.findByPk(usuarioId);
+
+    if (!usuario) {
+      return res.status(404).json({ error: true, message: 'Usuario não encontrado' });
+    }
+
+    usuario.nome = nome;
+    usuario.email = email;
+    usuario.senha = senha;
+    usuario.status = status;
+    await usuario.save();
+
+    res.status(200).json({ mensagem: 'Atualização realizada com sucesso' });
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
+
 
 module.exports = router;

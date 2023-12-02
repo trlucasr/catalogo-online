@@ -109,6 +109,37 @@
       </div>
     </div>
 
+    <div class="modal fade" id="modalEdicao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Categorias</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="categoria-form" method="POST">
+              <div class="mb-3">
+                <label for="descricaoEdicao" class="col-form-label">Descrição:</label>
+                <input type="text" class="form-control" id="descricaoEdicao" name="descricaoEdicao">
+              </div>
+              <div class="mb-3">
+                <label for="statusEdicao" class="col-form-label">Ativo:</label>
+                <select class="form-select" id="statusEdicao" name="statusEdicao">
+                  <option value="A">Sim</option>
+                  <option value="I">Não</option>
+                </select>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" id="botaoAtualizar" class="btn btn-primary" data-bs-dismiss="modal">Alterar</button>
+              </div>
+            </form>
+          </div>          
+        </div>
+      </div>
+    </div>
+
+
   </main>
 
   <footer class="text-body-secondary py-5">
